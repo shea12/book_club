@@ -6,9 +6,9 @@ import 'package:book_club/store/reducers.dart';
 import 'package:book_club/store/state.dart';
 import 'package:book_club/routes.dart';
 
-void main() => runApp(BookClubApp());
+void main() => runApp(BookClub());
 
-class BookClubApp extends StatelessWidget {
+class BookClub extends StatelessWidget {
   final Store<AppState> store = Store<AppState>(
     appReducer,
     initialState: AppState.initial(),
