@@ -1,0 +1,22 @@
+name: book_club
+description: Book Club
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  redux: ^3.0.0
+  flutter_redux: ^0.5.0
+  cupertino_icons: ^0.1.0
+  http: 0.12.0+3
+  test: 1.9.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
