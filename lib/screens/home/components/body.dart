@@ -26,7 +26,7 @@ class Body extends StatelessWidget {
           Text(vm.hint),
           CupertinoButton(
               onPressed: () {
-                vm.login(User(1, 'carshea@icloud.com', 'Caroline', 'Shea'));
+                // vm.login(User(1, 'carshea@icloud.com', 'Caroline', 'Shea'));
               },
               child: Text('log me in!'))
         ],
@@ -34,7 +34,6 @@ class Body extends StatelessWidget {
 
   Widget _createHasUserWidget(_HasUserViewModel vm) => Column(
         children: [
-          Text(vm.user.id.toString()),
           Text(vm.user.email),
           Text(vm.user.firstName),
           Text(vm.user.lastName),

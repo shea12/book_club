@@ -1,5 +1,8 @@
+import 'package:book_club/models/user.dart';
+import 'package:book_club/services/auth_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:provider/provider.dart';
 import 'package:redux/redux.dart';
 import 'package:book_club/store/middleware.dart';
 import 'package:book_club/store/reducers.dart';
@@ -17,12 +20,14 @@ class BookClub extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => StoreProvider(
-        store: this.store,
+      store: this.store,
+      child: StreamProvider<User>.value(
+        value: AuthService().user,
         child: CupertinoApp(
           title: 'Book Club',
           theme: CupertinoThemeData(primaryColor: CupertinoColors.black),
           initialRoute: '/',
           routes: routes,
         ),
-      );
+      ));
 }

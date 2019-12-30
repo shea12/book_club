@@ -2,7 +2,7 @@ import 'package:test/test.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
 import 'dart:convert';
-import 'package:book_club/api_provider.dart';
+import 'package:book_club/services/api_provider.dart';
 
 void main() {
   test("Testing the network call", () async {
