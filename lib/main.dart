@@ -24,7 +24,7 @@ class BookClub extends StatelessWidget {
       child: StreamProvider<User>.value(
         value: AuthService().user,
         child: CupertinoApp(
-          title: 'Book Club',
+          title: 'BookClub',
           theme: CupertinoThemeData(primaryColor: CupertinoColors.black),
           initialRoute: '/',
           routes: routes,

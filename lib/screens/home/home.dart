@@ -9,25 +9,51 @@ class Home extends StatelessWidget {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
             backgroundColor: CupertinoColors.systemYellow,
-            middle: Title(
-                color: CupertinoColors.black, child: Text('Book Club Home')),
+            middle:
+                Title(color: CupertinoColors.black, child: Text('BookClub')),
             trailing: GestureDetector(
                 onTap: () async {
                   await _auth.signOut();
                 },
-                child: Text('Log out'))),
-        child: Center(child: Text('Home!')));
+                child: Icon(
+                  CupertinoIcons.settings,
+                  color: CupertinoColors.black,
+                ))),
+        child: Column(
+          children: <Widget>[
+            Container(
+                margin: const EdgeInsets.all(20.0),
+                height: 100,
+                decoration: new BoxDecoration(
+                    color: CupertinoColors.systemPurple,
+                    borderRadius:
+                        new BorderRadius.all(new Radius.circular(20.0))),
+                child: new Center(
+                  child: new Text("Welcome to BookClub!",
+                      style: TextStyle(color: CupertinoColors.white, fontSize: 24 )),
+                )),
+            Container(
+                margin: const EdgeInsets.all(20.0),
+                height: 150,
+                decoration: new BoxDecoration(
+                    color: CupertinoColors.systemTeal,
+                    borderRadius:
+                        new BorderRadius.all(new Radius.circular(20.0))),
+                child: new Center(
+                  child: new Text(""),
+                )),
+            Container(
+                margin: const EdgeInsets.all(20.0),
+                height: 300,
+                decoration: new BoxDecoration(
+                    color: CupertinoColors.activeGreen,
+                    borderRadius:
+                        new BorderRadius.all(new Radius.circular(20.0))),
+                child: new Center(
+                  child: new Text("",
+                      style: TextStyle(color: CupertinoColors.white)),
+                )),
+          ],
+        ));
   }
 }
-
-/*
-trailing: GestureDetector(
-    onTap: () {
-      debugPrint('add icon tapped'));
-    },
-    child: Icon(
-      CupertinoIcons.add,
-      color: CupertinoColors.black,
-    ),
-  ),
-*/
