@@ -10,18 +10,15 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) => StoreConnector<AppState, _ViewModel>(
         converter: (Store<AppState> store) => _ViewModel.create(store),
         builder: (BuildContext context, _ViewModel viewModel) =>
-            Center(child: _createWidget(viewModel.user)),
+            Center(child: _createWidget(viewModel)),
       );
 
-  Widget _createWidget(_UserViewModel uvm) {
-    if (uvm is _NoUserViewModel) {
-      return _createNoUserWidget(uvm);
-    } else {
-      return _createHasUserWidget(uvm);
-    }
+  Widget _createWidget(_ViewModel vm) {
+    if (vm.user == null) return _createNoUserWidget(vm);
+    return _createHasUserWidget(vm);
   }
 
-  Widget _createNoUserWidget(_NoUserViewModel vm) => Column(
+  Widget _createNoUserWidget(_ViewModel vm) => Column(
         children: [
           Text(vm.hint),
           CupertinoButton(
@@ -32,11 +29,10 @@ class Body extends StatelessWidget {
         ],
       );
 
-  Widget _createHasUserWidget(_HasUserViewModel vm) => Column(
+  Widget _createHasUserWidget(_ViewModel vm) => Column(
         children: [
           Text(vm.user.email),
-          Text(vm.user.firstName),
-          Text(vm.user.lastName),
+          Text(vm.user.name),
           CupertinoButton(
               onPressed: () {
                 vm.logout(null);
@@ -47,38 +43,19 @@ class Body extends StatelessWidget {
 }
 
 class _ViewModel {
-  final String pageTitle;
-  final _UserViewModel user;
-
-  _ViewModel(this.pageTitle, this.user);
-
-  factory _ViewModel.create(Store<AppState> store) {
-    _UserViewModel user = _HasUserViewModel(store.state.user, (User user) {
-      store.dispatch(SetUserAction(null));
-    });
-
-    if (store.state.user == null) {
-      user = _NoUserViewModel("You are not logged in", (User user) {
-        store.dispatch(SetUserAction(user));
-      });
-    }
-
-    return _ViewModel('Current User', user);
-  }
-}
-
-abstract class _UserViewModel {}
-
-@immutable
-class _NoUserViewModel extends _UserViewModel {
+  final User user;
   final String hint;
   final Function(User) login;
-  _NoUserViewModel(this.hint, this.login);
-}
-
-@immutable
-class _HasUserViewModel extends _UserViewModel {
-  final User user;
   final Function(User) logout;
-  _HasUserViewModel(this.user, this.logout);
+
+  _ViewModel({this.user, this.hint, this.login, this.logout});
+
+  factory _ViewModel.create(Store<AppState> store) {
+    return _ViewModel(
+      user: store.state.user,
+      hint: "You are not logged in",
+      login: (User user) => store.dispatch(SetUserAction(user)),
+      logout: (User user) => store.dispatch(SetUserAction(null)),
+    );
+  }
 }

@@ -1,7 +1,6 @@
 class User {
   final String uid;
   String email;
-  String firstName;
-  String lastName;
+  String name;
   User({this.uid});
 }

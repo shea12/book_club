@@ -29,7 +29,7 @@ class AuthService {
     }
   }
 
-  Future<String> signInWithGoogle() async {
+  Future<User> signInWithGoogle() async {
     final GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount.authentication;
@@ -40,15 +40,15 @@ class AuthService {
     );
 
     final AuthResult authResult = await _auth.signInWithCredential(credential);
-    final FirebaseUser user = authResult.user;
+    final FirebaseUser firebaseUser = authResult.user;
 
-    assert(!user.isAnonymous);
-    assert(await user.getIdToken() != null);
+    assert(!firebaseUser.isAnonymous);
+    assert(await firebaseUser.getIdToken() != null);
 
     final FirebaseUser currentUser = await _auth.currentUser();
-    assert(user.uid == currentUser.uid);
+    assert(firebaseUser.uid == currentUser.uid);
 
-    return 'signInWithGoogle succeeded: $user';
+    return User(uid: firebaseUser.uid);
   }
 
   // sign out
