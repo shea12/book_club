@@ -8,8 +8,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  redux: ^3.0.0
-  flutter_redux: ^0.5.0
+  redux: ^4.0.0
+  flutter_redux: ^0.6.0
   cupertino_icons: ^0.1.0
   http: 0.12.0+3
   test: 1.9.4
@@ -17,8 +17,9 @@ dependencies:
   firebase_analytics: ^5.0.9
   firebase_auth: ^0.15.3
   cloud_firestore: ^0.13.0+1
-  provider: ^3.1.0
+  provider: ^4.0.1
   google_sign_in: 4.1.1
+  redux_thunk: ^0.3.0
 
 dev_dependencies:
   flutter_test:

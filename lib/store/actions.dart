@@ -1,31 +1,79 @@
 import 'package:book_club/models/club.dart';
-import 'package:book_club/models/meeting.dart';
-import 'package:book_club/models/book.dart';
+import 'package:book_club/models/user.dart';
+import 'package:redux/redux.dart';
+import 'package:redux_thunk/redux_thunk.dart';
+import 'package:book_club/services/auth_service.dart';
 
-// CLUB
-class SetClubAction {
+ThunkAction checkLoginStatus() {
+  final AuthService _authSvc = AuthService();
+  return (Store store) async {
+    new Future(() async {
+      store.dispatch(new StartLoadingAction());
+      User user = await _authSvc.checkLoginStatus();
+      if (user != null) store.dispatch(new LoginSuccessAction(user));
+    });
+  };
+}
+
+ThunkAction loginUser() {
+  final AuthService _authSvc = AuthService();
+  return (Store store) async {
+    new Future(() async {
+      store.dispatch(new StartLoadingAction());
+      User user = await _authSvc.signInWithGoogle();
+      if (user != null) store.dispatch(new LoginSuccessAction(user));
+      else store.dispatch(new LoginFailedAction()); 
+    });
+  };
+}
+
+ThunkAction logoutUser() {
+  final AuthService _authSvc = AuthService();
+  return (Store store) async {
+    new Future(() async {
+      store.dispatch(new StartLoadingAction());
+      await _authSvc.signOut();
+      store.dispatch(new LogoutSuccessAction());
+    });
+  };
+}
+
+class StartLoadingAction {
+  StartLoadingAction();
+}
+
+class LoginSuccessAction {
+  final User user;
+  LoginSuccessAction(this.user);
+}
+
+class LoginFailedAction {
+  LoginFailedAction();
+}
+
+class LogoutSuccessAction {
+  LogoutSuccessAction();
+}
+
+class LogoutFailedAction {
+  LogoutFailedAction();
+}
+
+class StartLoadingClubAction {
+  StartLoadingClubAction();
+}
+
+class GetClubAction {
   final Club club;
-  SetClubAction(this.club);
+  GetClubAction({this.club});
 }
 
-// MEETING
-class SetCurrentMeetingAction {
-  final Meeting meeting;
-  SetCurrentMeetingAction(this.meeting);
+class CreateClubAction {
+  final Club club;
+  CreateClubAction({this.club});
 }
 
-class SetMeetingListAction {
-  final List<Meeting> meetingList;
-  SetMeetingListAction(this.meetingList);
-}
-
-// BOOK
-class SetCurrentBookAction {
-  final Book book;
-  SetCurrentBookAction(this.book);
-}
-
-class SetBookListAction {
-  final List<Book> bookList;
-  SetBookListAction(this.bookList);
+class UpdateClubAction {
+  final Club club;
+  UpdateClubAction({this.club});
 }

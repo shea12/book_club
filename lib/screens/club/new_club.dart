@@ -2,7 +2,6 @@ import 'package:book_club/services/auth_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:book_club/styles/styles.dart';
 import 'package:book_club/services/flirestore_service.dart';
-import 'package:provider/provider.dart';
 import 'package:book_club/models/user.dart';
 import 'package:book_club/models/firestore_schema.dart';
 
@@ -18,14 +17,10 @@ class _NewClubState extends State<NewClub> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<User>.value(
-      value: AuthService().user,
-      child: _createScreen(),
-    );
+    return _createScreen();
   }
 
   _createScreen() {
-    final user = Provider.of<User>(context);
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.white,
       navigationBar: CupertinoNavigationBar(
@@ -96,7 +91,7 @@ class _NewClubState extends State<NewClub> {
               child: Text('Create Club!', style: TextStyle()),
               onPressed: () {
                 FireClub club = FireClub(name: name, secret: secret);
-                _firestore.createClub(club, user);
+                // _firestore.createClub(club, user);
               },
             )
           ],
