@@ -8,7 +8,13 @@ class AuthService {
 
   // create FireUser obj based on FirebaseUser
   User _fireUserFromFirebaseUser(FirebaseUser user) {
-    return user != null ? User(uid: user.uid) : null;
+    return user != null
+        ? User(
+            uid: user.uid,
+            email: user.email,
+            name: user.displayName,
+          )
+        : null;
   }
 
   // auth change user stream
@@ -30,7 +36,8 @@ class AuthService {
   }
 
   Future<User> signInWithGoogle() async {
-    final GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
+    final GoogleSignInAccount googleSignInAccount =
+        await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount.authentication;
 

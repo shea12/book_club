@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:book_club/models/firestore_schema.dart';
+import 'package:book_club/models/user.dart';
 
 class FirestoreService {
   final Firestore _firestore = Firestore.instance;
@@ -18,7 +19,7 @@ class FirestoreService {
     });
   }
 
-  void createClub(Club club, User user) {
+  DocumentReference createClub(FireClub club, User user) {
     _firestore.collection('clubs').add(club.toJson()).then((DocumentReference dr) {
       _firestore
           .collection('clubs')
@@ -30,6 +31,8 @@ class FirestoreService {
           .document(dr.documentID)
           .collection('privateData')
           .add({ 'admin': user.uid });
+      return dr;
     });
+    return null;
   }
 }

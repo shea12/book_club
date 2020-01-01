@@ -4,12 +4,12 @@ import 'package:book_club/store/actions.dart';
 import 'package:book_club/store/state.dart';
 
 List<Middleware<AppState>> createStoreMiddleware() => [
-      TypedMiddleware<AppState, SetClubAction>(_createClub),
-    ];
+  TypedMiddleware<AppState, SetClubAction>(_createClub),
+];
 
-Future _createClub(
-    Store<AppState> store, SetClubAction action, NextDispatcher next) async {
-  await Future.sync(
-      () => Duration(seconds: 3)); // Simulate saving the list to disk
+Future _createClub(Store<AppState> store, SetClubAction action, NextDispatcher next) async {
+  print('in here before');
+  await Future.sync(() => Duration(seconds: 3),);
   next(action);
+  print('in here after');
 }

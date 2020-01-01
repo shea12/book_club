@@ -1,13 +1,6 @@
-import 'package:book_club/models/user.dart';
 import 'package:book_club/models/club.dart';
 import 'package:book_club/models/meeting.dart';
 import 'package:book_club/models/book.dart';
-
-// USER
-class SetUserAction {
-  final User user;
-  SetUserAction(this.user);
-}
 
 // CLUB
 class SetClubAction {

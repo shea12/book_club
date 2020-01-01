@@ -8,7 +8,7 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    if (user == null) return GoogleAuth();
-    return Home();
+    if (user != null) return Home();
+    return GoogleAuth();
   }
 }

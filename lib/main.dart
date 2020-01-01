@@ -20,14 +20,15 @@ class BookClub extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => StoreProvider(
-      store: this.store,
-      child: StreamProvider<User>.value(
-        value: AuthService().user,
-        child: CupertinoApp(
-          title: 'BookClub',
-          theme: CupertinoThemeData(primaryColor: CupertinoColors.black),
-          initialRoute: '/',
-          routes: routes,
+        store: this.store,
+        child: StreamProvider<User>.value(
+          value: AuthService().user,
+          child: CupertinoApp(
+            title: 'BookClub',
+            theme: CupertinoThemeData(primaryColor: CupertinoColors.black),
+            initialRoute: '/',
+            routes: routes,
+          ),
         ),
-      ));
+      );
 }

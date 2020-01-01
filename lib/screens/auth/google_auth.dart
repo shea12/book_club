@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -78,8 +77,7 @@ class _ViewModel {
     final AuthService _authSvc = AuthService();
     return _ViewModel(
       signIn: () async {
-        User user = await _authSvc.signInWithGoogle();
-        store.dispatch(SetUserAction(user));
+        await _authSvc.signInWithGoogle();
       },
     );
   }

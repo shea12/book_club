@@ -1,11 +1,11 @@
 import 'package:meta/meta.dart';
 
-class User {
+class FireUser {
   final String uid;
   final String name;
   final String email;
 
-  User({
+  FireUser({
     @required this.uid,
     @required this.name,
     this.email,
@@ -19,11 +19,11 @@ class User {
       };
 }
 
-class Club {
+class FireClub {
   final String name;
   final String secret;
 
-  Club({
+  FireClub({
     @required this.name,
     @required this.secret,
   });
@@ -35,14 +35,14 @@ class Club {
       };
 }
 
-class Meeting {
+class FireMeeting {
   final String name;
   final DateTime chosen;
   final DateTime held;
   String location;
   String bookId;
 
-  Meeting({
+  FireMeeting({
     @required this.name,
     @required this.chosen,
     @required this.held,
@@ -59,13 +59,13 @@ class Meeting {
       };
 }
 
-class Book {
+class FireBook {
   final String googleId;
   final String title;
   final String author;
   final String media;
 
-  Book({
+  FireBook({
     @required this.googleId,
     @required this.title,
     @required this.author,
