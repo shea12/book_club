@@ -9,6 +9,9 @@ AppState appReducer(AppState state, action) {
   );
 }
 
+/*
+LOGIN
+*/
 final loginReducer = combineReducers<LoginState>([
   TypedReducer<LoginState, StartLoadingAction>(_startLoading),
   TypedReducer<LoginState, LoginSuccessAction>(_loginSuccess),
@@ -37,26 +40,28 @@ LoginState _logoutFailed(LoginState state, LogoutFailedAction action) {
   return state.copyWith(isLoading: false, error: true);
 }
 
-
+/*
+CLUB
+*/
 final clubReducer = combineReducers<ClubState>([
   TypedReducer<ClubState, StartLoadingClubAction>(_startLoadingClub),
-  TypedReducer<ClubState, GetClubAction>(_getClubSuccess),
-  TypedReducer<ClubState, CreateClubAction>(_createClubSuccess),
-  TypedReducer<ClubState, UpdateClubAction>(_updateClubSuccess),
+  TypedReducer<ClubState, GetClubSuccessAction>(_getClubSuccess),
+  TypedReducer<ClubState, CreateClubSuccessAction>(_createClubSuccess),
+  TypedReducer<ClubState, UpdateClubSuccessAction>(_updateClubSuccess),
 ]);
 
 ClubState _startLoadingClub(ClubState state, StartLoadingClubAction action) {
   return state.copyWith(isLoading: true, error: false);
 }
 
-ClubState _getClubSuccess(ClubState state, GetClubAction action) {
+ClubState _getClubSuccess(ClubState state, GetClubSuccessAction action) {
   return state.copyWith(club: action.club, isLoading: true, error: false);
 }
 
-ClubState _createClubSuccess(ClubState state, CreateClubAction action) {
+ClubState _createClubSuccess(ClubState state, CreateClubSuccessAction action) {
   return state.copyWith(club: action.club, isLoading: true, error: false);
 }
 
-ClubState _updateClubSuccess(ClubState state, UpdateClubAction action) {
+ClubState _updateClubSuccess(ClubState state, UpdateClubSuccessAction action) {
   return state.copyWith(club: action.club, isLoading: true, error: false);
 }

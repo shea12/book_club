@@ -34,6 +34,9 @@ class AppState {
         clubState == other.clubState;
 }
 
+/*
+LOGIN
+*/
 @immutable
 class LoginState {
   final User user;
@@ -75,6 +78,9 @@ class LoginState {
   int get hashCode => isLoading.hashCode ^ user.hashCode;
 }
 
+/*
+CLUB
+*/
 @immutable
 class ClubState {
   final Club club;

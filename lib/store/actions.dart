@@ -1,9 +1,14 @@
 import 'package:book_club/models/club.dart';
+import 'package:book_club/models/firestore_schema.dart';
 import 'package:book_club/models/user.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:book_club/services/auth_service.dart';
+import 'package:book_club/services/flirestore_service.dart';
 
+/*
+LOGIN
+*/
 ThunkAction checkLoginStatus() {
   final AuthService _authSvc = AuthService();
   return (Store store) async {
@@ -59,21 +64,35 @@ class LogoutFailedAction {
   LogoutFailedAction();
 }
 
+/*
+CLUB
+*/
+ThunkAction createClub(FireClub club, User user) {
+  final FirestoreService _firestore = FirestoreService();
+  return (Store store) async {
+    new Future(() async {
+      store.dispatch(new StartLoadingClubAction());
+      dynamic newClub = _firestore.createClub(club, user);
+      store.dispatch(new CreateClubSuccessAction(club: newClub));
+    });
+  };
+}
+
 class StartLoadingClubAction {
   StartLoadingClubAction();
 }
 
-class GetClubAction {
+class GetClubSuccessAction {
   final Club club;
-  GetClubAction({this.club});
+  GetClubSuccessAction({this.club});
 }
 
-class CreateClubAction {
+class CreateClubSuccessAction {
   final Club club;
-  CreateClubAction({this.club});
+  CreateClubSuccessAction({this.club});
 }
 
-class UpdateClubAction {
+class UpdateClubSuccessAction {
   final Club club;
-  UpdateClubAction({this.club});
+  UpdateClubSuccessAction({this.club});
 }
