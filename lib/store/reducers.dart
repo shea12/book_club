@@ -1,39 +1,67 @@
 import 'package:redux/redux.dart';
 import 'package:book_club/store/state.dart';
-import 'package:book_club/models/club.dart';
-import 'package:book_club/models/meeting.dart';
-import 'package:book_club/models/book.dart';
 import 'package:book_club/store/actions.dart';
 
-AppState appReducer(AppState state, action) => AppState(
-  clubReducer(state.club, action),
-);
+AppState appReducer(AppState state, action) {
+  return AppState(
+    loginState: loginReducer(state.loginState, action),
+    clubState: clubReducer(state.clubState, action)
+  );
+}
 
-final Reducer<Club> clubReducer = combineReducers([
-  TypedReducer<Club, SetClubAction>(_setClub),
+/*
+LOGIN
+*/
+final loginReducer = combineReducers<LoginState>([
+  TypedReducer<LoginState, StartLoadingAction>(_startLoading),
+  TypedReducer<LoginState, LoginSuccessAction>(_loginSuccess),
+  TypedReducer<LoginState, LoginFailedAction>(_loginFailed),
+  TypedReducer<LoginState, LogoutSuccessAction>(_logoutSuccess),
+  TypedReducer<LoginState, LogoutFailedAction>(_logoutFailed),
 ]);
-Club _setClub(Club club, SetClubAction action) => action.club;
 
-final Reducer<Meeting> currentMeetingReducer = combineReducers([
-  TypedReducer<Meeting, SetCurrentMeetingAction>(_setCurrentMeeting),
-]);
-Meeting _setCurrentMeeting(Meeting meeting, SetCurrentMeetingAction action) =>
-    action.meeting;
+LoginState _startLoading(LoginState state, StartLoadingAction action) {
+  return state.copyWith(isLoading: true, error: false);
+}
 
-final Reducer<Book> currentBookReducer = combineReducers([
-  TypedReducer<Book, SetCurrentBookAction>(_setCurrentBook),
-]);
-Book _setCurrentBook(Book book, SetCurrentBookAction action) => action.book;
+LoginState _loginSuccess(LoginState state, LoginSuccessAction action) {
+  return state.copyWith(user: action.user, isLoading: false, error: false);
+}
 
-final Reducer<List<Meeting>> meetingListReducer = combineReducers([
-  TypedReducer<List<Meeting>, SetMeetingListAction>(_setMeetingList),
-]);
-List<Meeting> _setMeetingList(
-        List<Meeting> meetingList, SetMeetingListAction action) =>
-    action.meetingList;
+LoginState _loginFailed(LoginState state, LoginFailedAction action) {
+  return state.copyWith(user: null, isLoading: false, error: true);
+}
 
-final Reducer<List<Book>> bookListReducer = combineReducers([
-  TypedReducer<List<Book>, SetBookListAction>(_setBookList),
+LoginState _logoutSuccess(LoginState state, LogoutSuccessAction action) {
+  return state.copyWith(user: null, isLoading: false, error: false);
+}
+
+LoginState _logoutFailed(LoginState state, LogoutFailedAction action) {
+  return state.copyWith(isLoading: false, error: true);
+}
+
+/*
+CLUB
+*/
+final clubReducer = combineReducers<ClubState>([
+  TypedReducer<ClubState, StartLoadingClubAction>(_startLoadingClub),
+  TypedReducer<ClubState, GetClubSuccessAction>(_getClubSuccess),
+  TypedReducer<ClubState, CreateClubSuccessAction>(_createClubSuccess),
+  TypedReducer<ClubState, UpdateClubSuccessAction>(_updateClubSuccess),
 ]);
-List<Book> _setBookList(List<Book> bookList, SetBookListAction action) =>
-    action.bookList;
+
+ClubState _startLoadingClub(ClubState state, StartLoadingClubAction action) {
+  return state.copyWith(isLoading: true, error: false);
+}
+
+ClubState _getClubSuccess(ClubState state, GetClubSuccessAction action) {
+  return state.copyWith(club: action.club, isLoading: true, error: false);
+}
+
+ClubState _createClubSuccess(ClubState state, CreateClubSuccessAction action) {
+  return state.copyWith(club: action.club, isLoading: true, error: false);
+}
+
+ClubState _updateClubSuccess(ClubState state, UpdateClubSuccessAction action) {
+  return state.copyWith(club: action.club, isLoading: true, error: false);
+}

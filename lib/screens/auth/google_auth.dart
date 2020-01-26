@@ -3,9 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:book_club/store/state.dart';
-import 'package:book_club/services/auth_service.dart';
 import 'package:book_club/store/actions.dart';
-import 'package:book_club/models/user.dart';
 
 class GoogleAuth extends StatefulWidget {
   @override
@@ -24,9 +22,13 @@ class _GoogleAuthState extends State<GoogleAuth> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text('BookClub',
-                      style: TextStyle(
-                          color: CupertinoColors.systemYellow, fontSize: 40.0)),
+                  Text(
+                    'BookClub',
+                    style: TextStyle(
+                      color: CupertinoColors.systemYellow,
+                      fontSize: 40.0,
+                    ),
+                  ),
                   SizedBox(height: 50),
                   _signInButton(viewModel),
                 ],
@@ -40,7 +42,7 @@ class _GoogleAuthState extends State<GoogleAuth> {
     return OutlineButton(
       splashColor: Colors.grey,
       onPressed: () async {
-        await viewModel.signIn();
+        await viewModel.login();
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       highlightElevation: 0,
@@ -51,7 +53,10 @@ class _GoogleAuthState extends State<GoogleAuth> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image(image: AssetImage("assets/google_logo.png"), height: 35.0),
+            Image(
+              image: AssetImage("assets/google_logo.png"),
+              height: 35.0,
+            ),
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(
@@ -70,14 +75,13 @@ class _GoogleAuthState extends State<GoogleAuth> {
 }
 
 class _ViewModel {
-  final Function() signIn;
-  _ViewModel({this.signIn});
+  final Function() login;
+  _ViewModel({this.login});
 
   factory _ViewModel.create(Store<AppState> store) {
-    final AuthService _authSvc = AuthService();
     return _ViewModel(
-      signIn: () async {
-        await _authSvc.signInWithGoogle();
+      login: () async {
+        store.dispatch(loginUser());
       },
     );
   }
