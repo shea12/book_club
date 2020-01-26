@@ -26,8 +26,13 @@ ThunkAction loginUser() {
     new Future(() async {
       store.dispatch(new StartLoadingAction());
       User user = await _authSvc.signInWithGoogle();
-      if (user != null) store.dispatch(new LoginSuccessAction(user));
-      else store.dispatch(new LoginFailedAction()); 
+      if (user != null) {
+        print('user is not null: ' + user.toString());
+        store.dispatch(new LoginSuccessAction(user));
+      } else {
+        print('user is null');
+        store.dispatch(new LoginFailedAction());
+      }
     });
   };
 }

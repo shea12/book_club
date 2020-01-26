@@ -7,7 +7,7 @@ class AuthService {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   // create FireUser obj based on FirebaseUser
-  User _fireUserFromFirebaseUser(FirebaseUser user) {
+  User _userFromFirebaseUser(FirebaseUser user) {
     return user != null
         ? User(
             uid: user.uid,
@@ -28,7 +28,7 @@ class AuthService {
     try {
       AuthResult result = await _auth.signInAnonymously();
       FirebaseUser user = result.user;
-      return _fireUserFromFirebaseUser(user);
+      return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
       return null;
@@ -55,7 +55,7 @@ class AuthService {
     final FirebaseUser currentUser = await _auth.currentUser();
     assert(firebaseUser.uid == currentUser.uid);
 
-    return User(uid: firebaseUser.uid);
+    return _userFromFirebaseUser(firebaseUser);
   }
 
   // sign out
@@ -71,8 +71,8 @@ class AuthService {
   Future<User> checkLoginStatus() async {
     try {
       FirebaseUser fireUser = await _auth.currentUser();
-      return _fireUserFromFirebaseUser(fireUser);
-    } catch(e) {
+      return _userFromFirebaseUser(fireUser);
+    } catch (e) {
       print(e.toString());
       return null;
     }
