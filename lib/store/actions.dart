@@ -1,36 +1,41 @@
 import 'package:book_club/models/club.dart';
-import 'package:book_club/models/firestore_schema.dart';
 import 'package:book_club/models/user.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:book_club/services/auth_service.dart';
-import 'package:book_club/services/flirestore_service.dart';
+import 'package:book_club/services/firestore_service.dart';
 
 /*
 LOGIN
 */
 ThunkAction checkLoginStatus() {
   final AuthService _authSvc = AuthService();
+  final FirestoreService _firestoreService = FirestoreService();
   return (Store store) async {
     new Future(() async {
       store.dispatch(new StartLoadingAction());
       User user = await _authSvc.checkLoginStatus();
-      if (user != null) store.dispatch(new LoginSuccessAction(user));
+      if (user != null) {
+        store.dispatch(new LoginSuccessAction(user));
+        List<Club> clubs = await _firestoreService.getClubsForUser(user);
+        store.dispatch(new GetAllClubsSuccessAction(clubs));
+      }
     });
   };
 }
 
 ThunkAction loginUser() {
   final AuthService _authSvc = AuthService();
+  final FirestoreService _firestoreService = FirestoreService();
   return (Store store) async {
     new Future(() async {
       store.dispatch(new StartLoadingAction());
       User user = await _authSvc.signInWithGoogle();
       if (user != null) {
-        print('user is not null: ' + user.toString());
         store.dispatch(new LoginSuccessAction(user));
+        List<Club> clubs = await _firestoreService.getClubsForUser(user);
+        store.dispatch(new GetAllClubsSuccessAction(clubs));
       } else {
-        print('user is null');
         store.dispatch(new LoginFailedAction());
       }
     });
@@ -72,19 +77,24 @@ class LogoutFailedAction {
 /*
 CLUB
 */
-ThunkAction createClub(FireClub club, User user) {
+ThunkAction createClub(Club club, User user) {
   final FirestoreService _firestore = FirestoreService();
   return (Store store) async {
     new Future(() async {
       store.dispatch(new StartLoadingClubAction());
-      dynamic newClub = _firestore.createClub(club, user);
-      store.dispatch(new CreateClubSuccessAction(club: newClub));
+      await _firestore.createClub(club, user);
+      store.dispatch(new CreateClubSuccessAction(club: club));
     });
   };
 }
 
 class StartLoadingClubAction {
   StartLoadingClubAction();
+}
+
+class GetAllClubsSuccessAction {
+  final List<Club> clubs;
+  GetAllClubsSuccessAction(this.clubs);
 }
 
 class GetClubSuccessAction {

@@ -4,34 +4,44 @@ class FireUser {
   final String uid;
   final String name;
   final String email;
+  final DateTime dateCreated;
+  final DateTime dateUpdated;
+  final List<String> clubs;
 
   FireUser({
     @required this.uid,
     @required this.name,
     this.email,
+    this.dateCreated,
+    this.dateUpdated,
+    this.clubs
   });
 
   Map<String, dynamic> toJson() => {
         'uid': uid,
         'name': name,
         'email': email,
-        'updated': DateTime.now(),
+        'dateCreated': dateCreated,
+        'dateUpdated': dateUpdated,
+        'clubs': clubs
       };
 }
 
 class FireClub {
   final String name;
   final String secret;
+  DateTime dateCreated;
 
   FireClub({
     @required this.name,
     @required this.secret,
+    this.dateCreated
   });
 
   Map<String, dynamic> toJson() => {
         'name': name,
         'secret': secret,
-        'created': DateTime.now(),
+        'dateCreated': DateTime.now(),
       };
 }
 

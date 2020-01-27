@@ -46,6 +46,7 @@ CLUB
 final clubReducer = combineReducers<ClubState>([
   TypedReducer<ClubState, StartLoadingClubAction>(_startLoadingClub),
   TypedReducer<ClubState, GetClubSuccessAction>(_getClubSuccess),
+  TypedReducer<ClubState, GetAllClubsSuccessAction>(_getAllClubsSuccess),
   TypedReducer<ClubState, CreateClubSuccessAction>(_createClubSuccess),
   TypedReducer<ClubState, UpdateClubSuccessAction>(_updateClubSuccess),
 ]);
@@ -54,14 +55,18 @@ ClubState _startLoadingClub(ClubState state, StartLoadingClubAction action) {
   return state.copyWith(isLoading: true, error: false);
 }
 
+ClubState _getAllClubsSuccess(ClubState state, GetAllClubsSuccessAction action) {
+  return state.copyWith(clubs: action.clubs, isLoading: true, error: false);
+}
+
 ClubState _getClubSuccess(ClubState state, GetClubSuccessAction action) {
-  return state.copyWith(club: action.club, isLoading: true, error: false);
+  return state.copyWith(club: action.club, isLoading: false, error: false);
 }
 
 ClubState _createClubSuccess(ClubState state, CreateClubSuccessAction action) {
-  return state.copyWith(club: action.club, isLoading: true, error: false);
+  return state.copyWith(club: action.club, isLoading: false, error: false);
 }
 
 ClubState _updateClubSuccess(ClubState state, UpdateClubSuccessAction action) {
-  return state.copyWith(club: action.club, isLoading: true, error: false);
+  return state.copyWith(club: action.club, isLoading: false, error: false);
 }

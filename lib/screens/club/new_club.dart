@@ -1,9 +1,14 @@
-import 'package:book_club/services/auth_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:book_club/styles/styles.dart';
-import 'package:book_club/services/flirestore_service.dart';
 import 'package:book_club/models/user.dart';
-import 'package:book_club/models/firestore_schema.dart';
+import 'package:book_club/models/club.dart';
+import 'package:book_club/screens/auth/google_auth.dart';
+import 'package:book_club/store/state.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter/material.dart';
+import 'package:book_club/store/state.dart';
+import 'package:book_club/store/actions.dart';
 
 class NewClub extends StatefulWidget {
   @override
@@ -11,17 +16,15 @@ class NewClub extends StatefulWidget {
 }
 
 class _NewClubState extends State<NewClub> {
-  FirestoreService _firestore = FirestoreService();
   String name = '';
   String secret = '';
 
   @override
-  Widget build(BuildContext context) {
-    return _createScreen();
-  }
-
-  _createScreen() {
-    return CupertinoPageScaffold(
+  Widget build(BuildContext context) => StoreConnector<AppState, _ViewModel>(
+      converter: (Store<AppState> store) => _ViewModel.create(store),
+      builder: (BuildContext context, _ViewModel vm) {
+        if (vm.user == null) return GoogleAuth();
+        return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.white,
       navigationBar: CupertinoNavigationBar(
         backgroundColor: CupertinoColors.systemYellow,
@@ -90,13 +93,33 @@ class _NewClubState extends State<NewClub> {
               color: CupertinoColors.systemGreen,
               child: Text('Create Club!', style: TextStyle()),
               onPressed: () {
-                FireClub club = FireClub(name: name, secret: secret);
-                // _firestore.createClub(club, user);
+                Club club = Club(name: name, secret: secret);
+                vm.createNewClub(club);
               },
             )
           ],
         ),
       ),
+    );
+      });
+}
+
+class _ViewModel {
+  final User user;
+  final bool isLoading;
+  final bool hasError;
+  final Function(Club club) createNewClub;
+
+  _ViewModel({this.user, this.isLoading, this.hasError, this.createNewClub});
+
+  factory _ViewModel.create(Store<AppState> store) {
+    return _ViewModel(
+      user: store.state.loginState.user,
+      isLoading: store.state.loginState.isLoading,
+      hasError: store.state.loginState.error,
+      createNewClub: (club) async {
+        store.dispatch(createClub(club, store.state.loginState.user));
+      },
     );
   }
 }

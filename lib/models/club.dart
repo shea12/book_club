@@ -1,6 +1,9 @@
 class Club {
-  final int id;
   final String name;
-  final DateTime dateCreated;
-  Club(this.id, this.name, this.dateCreated);
+  final String secret;
+  DateTime dateCreated;
+
+  Club({this.name, this.secret, this.dateCreated});
+
+  Map<String, dynamic> toJson() => {'name': name, 'secret': secret};
 }

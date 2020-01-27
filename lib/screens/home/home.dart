@@ -1,4 +1,5 @@
 import 'package:book_club/models/user.dart';
+import 'package:book_club/models/club.dart';
 import 'package:book_club/screens/auth/google_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:book_club/store/state.dart';
@@ -10,8 +11,8 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) => StoreConnector<AppState, _ViewModel>(
       converter: (Store<AppState> store) => _ViewModel.create(store),
-      builder: (BuildContext context, _ViewModel viewModel) {
-        if (viewModel.user == null) return GoogleAuth();
+      builder: (BuildContext context, _ViewModel vm) {
+        if (vm.user == null) return GoogleAuth();
         return CupertinoPageScaffold(
           navigationBar: CupertinoNavigationBar(
             backgroundColor: CupertinoColors.systemYellow,
@@ -21,7 +22,7 @@ class Home extends StatelessWidget {
             ),
             trailing: GestureDetector(
               onTap: () async {
-                viewModel.logout();
+                vm.logout();
               },
               child: Icon(
                 CupertinoIcons.settings,
@@ -45,7 +46,7 @@ class Home extends StatelessWidget {
                       ),
                       child: new Center(
                         child: new Text(
-                          'Welcome ' + viewModel.user.name,
+                          "User.name: ${vm.user.name}, User.email: ${vm.user.email}, User.uid ${vm.user.uid}, User.dateCreated: ${vm.user.dateCreated}, User.dateUpdated: ${vm.user.dateUpdated}",
                           style: TextStyle(
                               color: CupertinoColors.white,
                               fontSize: 14,
@@ -94,7 +95,7 @@ class Home extends StatelessWidget {
                 ),
                 child: new Center(
                   child: new Text(
-                    '',
+                    "clubs: ${vm.clubs}",
                     style: TextStyle(color: CupertinoColors.white),
                   ),
                 ),
@@ -109,15 +110,17 @@ class _ViewModel {
   final User user;
   final bool isLoading;
   final bool hasError;
+  final List<Club> clubs;
   final Function() logout;
 
-  _ViewModel({this.user, this.isLoading, this.hasError, this.logout});
+  _ViewModel({this.user, this.isLoading, this.hasError, this.clubs, this.logout});
 
   factory _ViewModel.create(Store<AppState> store) {
     return _ViewModel(
       user: store.state.loginState.user,
       isLoading: store.state.loginState.isLoading,
       hasError: store.state.loginState.error,
+      clubs: store.state.clubState.clubs,
       logout: () async {
         store.dispatch(logoutUser());
       },

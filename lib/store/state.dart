@@ -83,26 +83,30 @@ CLUB
 */
 @immutable
 class ClubState {
+  final List<Club> clubs;
   final Club club;
   final bool isLoading;
   final bool error;
 
   ClubState({
-    @required this.club,
+    this.clubs,
+    this.club,
     @required this.isLoading,
     @required this.error,
   });
 
   factory ClubState.initial() {
     return new ClubState(
+      clubs: null,
       club: null,
       isLoading: false,
       error: false,
     );
   }
 
-  ClubState copyWith({Club club, bool isLoading, bool error}) {
+  ClubState copyWith({List<Club> clubs, Club club, bool isLoading, bool error}) {
     return new ClubState(
+      clubs: clubs,
       club: club,
       isLoading: isLoading ?? this.isLoading,
       error: error ?? this.error,
@@ -116,7 +120,8 @@ class ClubState {
           runtimeType == other.runtimeType &&
           isLoading == other.isLoading &&
           error == other.error &&
-          club == other.club;
+          club == other.club &&
+          clubs == other.clubs;
 
   @override
   int get hashCode => isLoading.hashCode ^ club.hashCode;

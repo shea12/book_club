@@ -20,13 +20,13 @@ class BookClub extends StatelessWidget {
   Widget build(BuildContext context) {
     store.dispatch(checkLoginStatus());
     return StoreProvider(
-        store: this.store,
-        child: CupertinoApp(
-          title: 'BookClub',
-          theme: CupertinoThemeData(primaryColor: CupertinoColors.black),
-          initialRoute: '/',
-          routes: routes,
-        ),
-      );
+      store: this.store,
+      child: CupertinoApp(
+        title: 'BookClub',
+        theme: CupertinoThemeData(primaryColor: CupertinoColors.black),
+        initialRoute: '/',
+        routes: routes,
+      ),
+    );
   }
 }
