@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:book_club/styles/styles.dart';
-import 'package:book_club/models/user.dart';
-import 'package:book_club/models/club.dart';
+import 'package:book_club/models/viewModels/user.dart';
+import 'package:book_club/models/viewModels/club.dart';
 import 'package:book_club/screens/auth/google_auth.dart';
 import 'package:book_club/store/state.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter/material.dart';
-import 'package:book_club/store/state.dart';
 import 'package:book_club/store/actions.dart';
 
 class NewClub extends StatefulWidget {
@@ -25,82 +24,82 @@ class _NewClubState extends State<NewClub> {
       builder: (BuildContext context, _ViewModel vm) {
         if (vm.user == null) return GoogleAuth();
         return CupertinoPageScaffold(
-      backgroundColor: CupertinoColors.white,
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: CupertinoColors.systemYellow,
-        middle: Text(
-          'New Club',
-          style: TextStyle(color: CupertinoColors.black),
-        ),
-      ),
-      child: Center(
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 20),
-            Text('Create a New Club', style: Styles.headerText),
-            SizedBox(height: 20),
-            SizedBox(
-              height: 50,
-              width: 300,
-              child: CupertinoTextField(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
-                clearButtonMode: OverlayVisibilityMode.editing,
-                autocorrect: false,
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      width: 0,
-                      color: CupertinoColors.inactiveGray,
+          backgroundColor: CupertinoColors.white,
+          navigationBar: CupertinoNavigationBar(
+            backgroundColor: CupertinoColors.systemYellow,
+            middle: Text(
+              'New Club',
+              style: TextStyle(color: CupertinoColors.black),
+            ),
+          ),
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 20),
+                Text('Create a New Club', style: Styles.headerText),
+                SizedBox(height: 20),
+                SizedBox(
+                  height: 50,
+                  width: 300,
+                  child: CupertinoTextField(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+                    clearButtonMode: OverlayVisibilityMode.editing,
+                    autocorrect: false,
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 0,
+                          color: CupertinoColors.inactiveGray,
+                        ),
+                      ),
                     ),
+                    placeholder: 'Name',
+                    onChanged: (newName) {
+                      setState(() {
+                        name = newName;
+                      });
+                    },
                   ),
                 ),
-                placeholder: 'Name',
-                onChanged: (newName) {
-                  setState(() {
-                    name = newName;
-                  });
-                },
-              ),
-            ),
-            SizedBox(height: 20),
-            SizedBox(
-              height: 50,
-              width: 300,
-              child: CupertinoTextField(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
-                clearButtonMode: OverlayVisibilityMode.editing,
-                autocorrect: false,
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      width: 0,
-                      color: CupertinoColors.inactiveGray,
+                SizedBox(height: 20),
+                SizedBox(
+                  height: 50,
+                  width: 300,
+                  child: CupertinoTextField(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+                    clearButtonMode: OverlayVisibilityMode.editing,
+                    autocorrect: false,
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 0,
+                          color: CupertinoColors.inactiveGray,
+                        ),
+                      ),
                     ),
+                    placeholder: 'Secret',
+                    onChanged: (newSecret) {
+                      setState(() {
+                        secret = newSecret;
+                      });
+                    },
                   ),
                 ),
-                placeholder: 'Secret',
-                onChanged: (newSecret) {
-                  setState(() {
-                    secret = newSecret;
-                  });
-                },
-              ),
+                SizedBox(height: 20),
+                CupertinoButton(
+                  color: CupertinoColors.systemGreen,
+                  child: Text('Create Club!', style: TextStyle()),
+                  onPressed: () {
+                    Club club = Club(name: name, secret: secret);
+                    vm.createNewClub(club);
+                  },
+                )
+              ],
             ),
-            SizedBox(height: 20),
-            CupertinoButton(
-              color: CupertinoColors.systemGreen,
-              child: Text('Create Club!', style: TextStyle()),
-              onPressed: () {
-                Club club = Club(name: name, secret: secret);
-                vm.createNewClub(club);
-              },
-            )
-          ],
-        ),
-      ),
-    );
+          ),
+        );
       });
 }
 

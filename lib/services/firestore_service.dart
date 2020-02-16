@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:book_club/models/user.dart';
-import 'package:book_club/models/club.dart';
+import 'package:book_club/models/viewModels/user.dart';
+import 'package:book_club/models/viewModels/club.dart';
 
 class FirestoreService {
   static final Firestore db = Firestore.instance;

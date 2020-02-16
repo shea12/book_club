@@ -1,5 +1,5 @@
-import 'package:book_club/models/club.dart';
-import 'package:book_club/models/user.dart';
+import 'package:book_club/models/viewModels/club.dart';
+import 'package:book_club/models/viewModels/user.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:book_club/services/auth_service.dart';
