@@ -1,81 +1,122 @@
+import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:book_club/models/viewModels/user.dart';
 import 'package:book_club/models/viewModels/club.dart';
 import 'package:book_club/screens/auth/google_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:book_club/store/state.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:book_club/store/actions.dart';
 
+Firestore db = Firestore.instance;
+
 class Account extends StatelessWidget {
   @override
   Widget build(BuildContext context) => StoreConnector<AppState, _ViewModel>(
-      converter: (Store<AppState> store) => _ViewModel.create(store),
-      builder: (BuildContext context, _ViewModel vm) {
-        if (vm.user == null) return GoogleAuth();
-        return CupertinoPageScaffold(
-          navigationBar: CupertinoNavigationBar(
-            backgroundColor: CupertinoColors.systemYellow,
-            middle: Title(
-              color: CupertinoColors.black,
-              child: Text('BookClub'),
-            ),
-            trailing: GestureDetector(
-              onTap: () async {
-                vm.logout();
-              },
-              child: Icon(
-                CupertinoIcons.settings,
+        converter: (Store<AppState> store) => _ViewModel.create(store),
+        builder: (BuildContext context, _ViewModel vm) {
+          if (vm.user == null) return GoogleAuth();
+          return CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              backgroundColor: CupertinoColors.systemYellow,
+              middle: Title(
                 color: CupertinoColors.black,
+                child: Text('Account', style: TextStyle(fontSize: 20.0)),
+              ),
+              trailing: GestureDetector(
+                onTap: () async {},
+                child: Icon(
+                  CupertinoIcons.pen,
+                  color: CupertinoColors.black,
+                  size: 25.0,
+                ),
               ),
             ),
-          ),
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Flexible(
-                    child: Container(
-                      padding: const EdgeInsets.all(10.0),
-                      margin: const EdgeInsets.all(20.0),
-                      height: 120,
-                      decoration: new BoxDecoration(
-                        color: CupertinoColors.systemPurple,
-                        borderRadius: new BorderRadius.all(
-                          new Radius.circular(20.0),
-                        ),
-                      ),
-                      child: new Text(
-                        "User.name: ${vm.user.name}, User.email: ${vm.user.email}, User.uid ${vm.user.uid}, User.dateCreated: ${vm.user.dateCreated}, User.dateUpdated: ${vm.user.dateUpdated}",
-                        style: TextStyle(
-                            color: CupertinoColors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                margin: const EdgeInsets.all(20.0),
-                height: 300,
-                decoration: new BoxDecoration(
-                  color: CupertinoColors.activeGreen,
-                  borderRadius: new BorderRadius.all(
-                    new Radius.circular(20.0),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  child: StreamBuilder(
+                    stream: db
+                        .collection('users')
+                        .document(vm.user.documentID)
+                        .snapshots(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<DocumentSnapshot> s) {
+                      if (!s.hasData) return CupertinoActivityIndicator();
+                      return UserDataView(doc: s.data);
+                    },
                   ),
                 ),
-                child: new Center(
-                  child: new Text(
-                    "clubs: ${vm.clubs}",
-                    style: TextStyle(color: CupertinoColors.white),
+                Container(
+                  child: StreamBuilder(
+                    stream: _getClubsStream(vm.clubs),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> s) {
+                      if (!s.hasData) return CupertinoActivityIndicator();
+                      return ClubsDataView(docs: s.data.documents);
+                    },
                   ),
-                ),
-              ),
-            ],
-          ),
-        );
-      });
+                )
+              ],
+            ),
+          );
+        },
+      );
+
+  Stream<QuerySnapshot> _getClubsStream(List<Club> clubs) {
+    return db.collection('clubs').snapshots();
+  }
+}
+
+class ClubsDataView extends StatelessWidget {
+  final List<DocumentSnapshot> docs;
+  ClubsDataView({this.docs});
+
+  @override
+  Widget build(BuildContext context) {
+    if (docs.length <= 0) return Container(child: Text("No clubs found"));
+
+    String name = docs[0]['name'].toString();
+    String secret = docs[0]['secret'].toString();
+
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: <Widget>[
+            Text(name, style: TextStyle(fontSize: 20.0)),
+            Text(secret, style: TextStyle(fontSize: 20.0))
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class UserDataView extends StatelessWidget {
+  final DocumentSnapshot doc;
+  UserDataView({this.doc});
+
+  @override
+  Widget build(BuildContext context) {
+    if (!doc.exists) return Container(child: Text("No user found"));
+
+    String name = doc['name'].toString();
+    String email = doc['email'].toString();
+
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: <Widget>[
+            Text(name, style: TextStyle(fontSize: 20.0)),
+            Text(email, style: TextStyle(fontSize: 20.0))
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class _ViewModel {

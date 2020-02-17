@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:book_club/screens/home/home.dart';
 import 'package:book_club/screens/home/homenew.dart';
 import 'package:book_club/screens/search/search.dart';
 import 'package:book_club/screens/account/account.dart';
 
-class TabWrapper extends StatelessWidget {
+class TabWrapperNew extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
@@ -13,10 +12,6 @@ class TabWrapper extends StatelessWidget {
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.home),
             title: Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.home),
-            title: Text('HomeNew'),
           ),
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.search),
@@ -33,7 +28,7 @@ class TabWrapper extends StatelessWidget {
           case 0:
             return CupertinoTabView(builder: (context) {
               return CupertinoPageScaffold(
-                child: Home(),
+                child: HomeNew(),
               );
             });
           case 1:
@@ -43,12 +38,6 @@ class TabWrapper extends StatelessWidget {
               );
             });
           case 2:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(
-                child: Search(),
-              );
-            });
-          case 3:
             return CupertinoTabView(builder: (context) {
               return CupertinoPageScaffold(
                 child: Account(),

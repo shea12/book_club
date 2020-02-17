@@ -45,7 +45,8 @@ class FirestoreService {
     user.dateCreated = DateTime.now();
     user.dateUpdated = DateTime.now();
     user.clubIds = new List<String>();
-    db.collection('users').document(user.uid).setData(user.toJson());
+    DocumentReference docRef = await db.collection('users').add(user.toJson());
+    user.documentID = docRef.documentID;
     return user;
   }
 
