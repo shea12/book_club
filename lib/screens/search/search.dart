@@ -9,9 +9,9 @@ import 'package:book_club/store/actions.dart';
 class Search extends StatelessWidget {
   @override
   Widget build(BuildContext context) => StoreConnector<AppState, _ViewModel>(
-      converter: (Store<AppState> store) => _ViewModel.create(store),
-      builder: (BuildContext context, _ViewModel vm) {
-        return CupertinoPageScaffold(
+        converter: (Store<AppState> store) => _ViewModel.create(store),
+        builder: (BuildContext context, _ViewModel vm) {
+          return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
               backgroundColor: CupertinoColors.systemYellow,
               middle: Title(
@@ -61,8 +61,10 @@ class Search extends StatelessWidget {
                   ),
                 ),
               ],
-            ));
-      });
+            ),
+          );
+        },
+      );
 }
 
 class _ViewModel {

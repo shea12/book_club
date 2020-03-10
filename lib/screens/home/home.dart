@@ -10,31 +10,32 @@ import 'package:book_club/store/actions.dart';
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) => StoreConnector<AppState, _ViewModel>(
-      converter: (Store<AppState> store) => _ViewModel.create(store),
-      builder: (BuildContext context, _ViewModel vm) {
-        if (vm.user == null) return GoogleAuth();
-        return CupertinoPageScaffold(
-          navigationBar: CupertinoNavigationBar(
-            backgroundColor: CupertinoColors.systemYellow,
-            middle: Title(
-              color: CupertinoColors.black,
-              child: Text('BookClub'),
-            ),
-            trailing: GestureDetector(
-              onTap: () async {
-                vm.logout();
-              },
-              child: Icon(
-                CupertinoIcons.settings,
+        converter: (Store<AppState> store) => _ViewModel.create(store),
+        builder: (BuildContext context, _ViewModel vm) {
+          if (vm.user == null) return GoogleAuth();
+          return CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              backgroundColor: CupertinoColors.systemYellow,
+              middle: Title(
                 color: CupertinoColors.black,
+                child: Text('BookClub'),
+              ),
+              trailing: GestureDetector(
+                onTap: () async {
+                  vm.logout();
+                },
+                child: Icon(
+                  CupertinoIcons.settings,
+                  color: CupertinoColors.black,
+                ),
               ),
             ),
-          ),
-          child: Column(
-            children: <Widget>[_createOrShowClubs(vm, context)],
-          ),
-        );
-      });
+            child: Column(
+              children: <Widget>[_createOrShowClubs(vm, context)],
+            ),
+          );
+        },
+      );
 
   Widget _createOrShowClubs(_ViewModel vm, BuildContext context) {
     if (vm.clubs.length >= 1) {
