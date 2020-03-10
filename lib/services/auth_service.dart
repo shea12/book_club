@@ -1,4 +1,4 @@
-import 'package:book_club/models/user.dart';
+import 'package:book_club/models/viewModels/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:book_club/services/firestore_service.dart';

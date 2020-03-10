@@ -1,5 +1,5 @@
-import 'package:book_club/models/user.dart';
-import 'package:book_club/models/club.dart';
+import 'package:book_club/models/viewModels/user.dart';
+import 'package:book_club/models/viewModels/club.dart';
 import 'package:book_club/screens/auth/google_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:book_club/store/state.dart';
@@ -10,100 +10,83 @@ import 'package:book_club/store/actions.dart';
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) => StoreConnector<AppState, _ViewModel>(
-      converter: (Store<AppState> store) => _ViewModel.create(store),
-      builder: (BuildContext context, _ViewModel vm) {
-        if (vm.user == null) return GoogleAuth();
-        return CupertinoPageScaffold(
-          navigationBar: CupertinoNavigationBar(
-            backgroundColor: CupertinoColors.systemYellow,
-            middle: Title(
-              color: CupertinoColors.black,
-              child: Text('BookClub'),
-            ),
-            trailing: GestureDetector(
-              onTap: () async {
-                vm.logout();
-              },
-              child: Icon(
-                CupertinoIcons.settings,
+        converter: (Store<AppState> store) => _ViewModel.create(store),
+        builder: (BuildContext context, _ViewModel vm) {
+          if (vm.user == null) return GoogleAuth();
+          return CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              backgroundColor: CupertinoColors.systemYellow,
+              middle: Title(
                 color: CupertinoColors.black,
+                child: Text('BookClub'),
+              ),
+              trailing: GestureDetector(
+                onTap: () async {
+                  vm.logout();
+                },
+                child: Icon(
+                  CupertinoIcons.settings,
+                  color: CupertinoColors.black,
+                ),
               ),
             ),
+            child: Column(
+              children: <Widget>[_createOrShowClubs(vm, context)],
+            ),
+          );
+        },
+      );
+
+  Widget _createOrShowClubs(_ViewModel vm, BuildContext context) {
+    if (vm.clubs.length >= 1) {
+      return Container(
+        padding: const EdgeInsets.all(10.0),
+        margin: const EdgeInsets.all(20.0),
+        height: 150,
+        decoration: new BoxDecoration(
+            borderRadius: new BorderRadius.all(
+              new Radius.circular(20.0),
+            ),
+            border:
+                Border.all(color: CupertinoColors.activeOrange, width: 4.0)),
+        child: new Row(
+          children: <Widget>[
+            Text("Current Club: "),
+            Row(children: vm.clubs.map((club) => new Text(club.name)).toList())
+          ],
+        ),
+      );
+    } else {
+      return Container(
+        padding: const EdgeInsets.all(10.0),
+        margin: const EdgeInsets.all(20.0),
+        height: 150,
+        decoration: new BoxDecoration(
+          color: CupertinoColors.systemTeal,
+          borderRadius: new BorderRadius.all(
+            new Radius.circular(20.0),
           ),
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Flexible(
-                    child: Container(
-                      margin: const EdgeInsets.all(20.0),
-                      height: 100,
-                      decoration: new BoxDecoration(
-                        color: CupertinoColors.systemPurple,
-                        borderRadius: new BorderRadius.all(
-                          new Radius.circular(20.0),
-                        ),
-                      ),
-                      child: new Center(
-                        child: new Text(
-                          "User.name: ${vm.user.name}, User.email: ${vm.user.email}, User.uid ${vm.user.uid}, User.dateCreated: ${vm.user.dateCreated}, User.dateUpdated: ${vm.user.dateUpdated}",
-                          style: TextStyle(
-                              color: CupertinoColors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+        ),
+        child: new Row(
+          children: <Widget>[
+            GestureDetector(
+              onTap: () async {
+                Navigator.pushNamed(context, '/new_club');
+              },
+              child: new Text(
+                'New Club  ',
+                style: TextStyle(color: CupertinoColors.white),
               ),
-              Container(
-                margin: const EdgeInsets.all(20.0),
-                height: 150,
-                decoration: new BoxDecoration(
-                  color: CupertinoColors.systemTeal,
-                  borderRadius: new BorderRadius.all(
-                    new Radius.circular(20.0),
-                  ),
-                ),
-                child: new Row(
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () async {
-                        Navigator.pushNamed(context, '/new_club');
-                      },
-                      child: new Text(
-                        'New Club  ',
-                        style: TextStyle(color: CupertinoColors.white),
-                      ),
-                    ),
-                    Icon(
-                      CupertinoIcons.plus_circled,
-                      color: CupertinoColors.white,
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(20.0),
-                height: 300,
-                decoration: new BoxDecoration(
-                  color: CupertinoColors.activeGreen,
-                  borderRadius: new BorderRadius.all(
-                    new Radius.circular(20.0),
-                  ),
-                ),
-                child: new Center(
-                  child: new Text(
-                    "clubs: ${vm.clubs}",
-                    style: TextStyle(color: CupertinoColors.white),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      });
+            ),
+            Icon(
+              CupertinoIcons.plus_circled,
+              color: CupertinoColors.white,
+            )
+          ],
+        ),
+      );
+    }
+  }
 }
 
 class _ViewModel {
@@ -113,7 +96,8 @@ class _ViewModel {
   final List<Club> clubs;
   final Function() logout;
 
-  _ViewModel({this.user, this.isLoading, this.hasError, this.clubs, this.logout});
+  _ViewModel(
+      {this.user, this.isLoading, this.hasError, this.clubs, this.logout});
 
   factory _ViewModel.create(Store<AppState> store) {
     return _ViewModel(

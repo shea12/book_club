@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:book_club/models/user.dart';
-import 'package:book_club/models/club.dart';
+import 'package:book_club/models/viewModels/user.dart';
+import 'package:book_club/models/viewModels/club.dart';
 
 class FirestoreService {
   static final Firestore db = Firestore.instance;
@@ -45,8 +45,7 @@ class FirestoreService {
     user.dateCreated = DateTime.now();
     user.dateUpdated = DateTime.now();
     user.clubIds = new List<String>();
-    DocumentReference docRef = await db.collection('users').add(user.toJson());
-    user.documentID = docRef.documentID;
+    db.collection('users').document(user.uid).setData(user.toJson());
     return user;
   }
 
